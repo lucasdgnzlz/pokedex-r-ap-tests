@@ -13,9 +13,11 @@ describe("actualizarTextoIndicePokemones", () => {
 });
 
 describe("mostrarListadoPokemones", () => {
-  it("Muestra el listado de los pokémon", () => {
+  beforeEach(() => {
     document.body.innerHTML = '<div id="indice"></div>';
+  });
 
+  it("Muestra el listado de los pokémon", () => {
     const listadoNombresPokemones = [];
 
     fixtureListadoPagina1.results.forEach(pokemon => {
@@ -30,5 +32,23 @@ describe("mostrarListadoPokemones", () => {
     listadoNombresPokemones.forEach(nombre => {
       expect($indice.textContent).toContain(nombre);
     });
+  });
+
+  it("Ejecuta la función asignada a los enlaces del indice de pokemones", async () => {
+    const funcionAEspiar = jest.fn();
+    const listadoNombresPokemones = [];
+
+    fixtureListadoPagina1.results.forEach(pokemon => {
+      const nombrePokemon = pokemon["name"];
+      listadoNombresPokemones.push(nombrePokemon);
+    });
+    mostrarListadoPokemones(listadoNombresPokemones, funcionAEspiar);
+
+    const eventoClick = new Event('click');
+    const $pokemonesListados = document.querySelectorAll("#indice a");
+
+    const $primerPokemonEnlace = $pokemonesListados[0];
+    $primerPokemonEnlace.dispatchEvent(eventoClick);
+    expect(funcionAEspiar).toHaveBeenCalled();
   });
 });
