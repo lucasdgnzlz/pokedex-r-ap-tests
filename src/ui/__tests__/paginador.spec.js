@@ -35,7 +35,7 @@ describe("mostrarPaginador", () => {
 });
 
 describe("manejarCambioPagina", () => {
-  it("Maneja el cambio a la página específica", () => { 
+  it("Maneja el cambio a la página específica", () => {
     const objetoEvento = {
       preventDefault: jest.fn(),
       target: {
@@ -49,4 +49,21 @@ describe("manejarCambioPagina", () => {
     expect(objetoEvento.preventDefault).toHaveBeenCalled();
     expect(callbackAEspiar).toHaveBeenCalled();
   });
+
+  it("Maneja cambio a la siguiente página", () => {
+    const enlaceDeEjemplo = "https://ejemplo";
+    const objetoEvento = {
+      preventDefault: jest.fn(),
+      target: {
+        getAttribute: () => enlaceDeEjemplo,
+        dataset: 13
+      }
+    }
+    const callbackAEspiar = jest.fn();
+
+    manejarCambioPagina(objetoEvento, callbackAEspiar);
+    expect(objetoEvento.preventDefault).toHaveBeenCalled();
+    expect(callbackAEspiar).toHaveBeenCalled();
+    expect(callbackAEspiar).toHaveBeenCalledWith(enlaceDeEjemplo);
+  })
 });
